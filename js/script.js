@@ -8,7 +8,7 @@ project 1 - A Random Quote Generator
   // Reach out in your Slack community - https://treehouse-fsjs-102.slack.com/app_redirect?channel=chit-chat
 
 /*** 
- * `quotes` array 
+ * `quotes` array an array of quote objects
 ***/
 
 let quotes = [
@@ -82,7 +82,8 @@ let quotes = [
     quote: "What is best in life? To crush your enemies, see them driven before you, and to hear the lamentation of their women!", 
     source: "Arnold Shwarzenegger", 
     citation: "Conan the Barbarian",
-    year: 1982
+    year: 1982,
+    tags: "philosophy"
   },
   {
     quote: "You’re a funny guy Sully, I like you. That’s why I’m going to kill you last.", 
@@ -189,7 +190,9 @@ let quotes = [
 ];
 
 /***
- * `getRandomQuote` function
+ * `getRandomQuote` function generates a random number
+ * within the bounds of the quotes array and returns
+ * a quote object based on that number
 ***/
 function getRandomQuote()
 {
@@ -198,12 +201,9 @@ function getRandomQuote()
   return quotes[i];
 }
 
-console.log(getRandomQuote());
-console.log(getRandomQuote());
-console.log(getRandomQuote());
-console.log(getRandomQuote());
 /***
- * `printQuote` function
+ * `printQuote` function gets a random quote and writes the properties
+ * of the selected quote object to the document
 ***/
 function printQuote()
 {
@@ -220,12 +220,40 @@ function printQuote()
     html += `<span class="year">${randomQuote.year}</span>`;
   }
 
-  html += "</p>";
+  if(randomQuote.hasOwnProperty("tags"))
+  {
+    html += `<span class="tags">${randomQuote.tags}</span>`;
+  }
 
+  html += "</p>";
+  document.body.style.backgroundColor = randomColor(); 
   document.getElementById('quote-box').innerHTML = html;
 
 }
 
+/***
+ * `randomColor` selects a random color and
+ * returns that color. checks to make sure the
+ * new color isnt the same as the current one
+***/
+function randomColor()
+{
+  let colors = ["red", "blue", "green", "yellow", "orange", "purple", "cyan", "magenta"];
+  let i = Math.floor(Math.random() * colors.length);
+  //console.log(`that last color was ${document.body.style.backgroundColor} changing to ${colors[i]}`);
+  if(colors[i] == document.body.style.backgroundColor)
+  {
+    //console.log("the color wass the same! changing color!!!")
+    if(i === colors.length - 1)
+      return colors[i - 1];
+    else  
+      return colors[i + 1];  
+  }
+
+  return colors[i];
+}
+
+setInterval(printQuote, 15000);
 
 /***
  * click event listener for the print quote button
